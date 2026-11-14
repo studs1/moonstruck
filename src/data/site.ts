@@ -33,6 +33,21 @@ export const sounds = [
   { title: 'Spinning Wheel', file: 'spinning.mp3' },
 ];
 
+/** Stageplan / Technik (gemäss public/downloads/Stage-setup_moonstruck.pdf) */
+export const stageSetup = [
+  { instrument: 'Schlagzeug', detail: 'Headset-Mikrofon vorhanden' },
+  { instrument: 'Bass (Sousaphon)', detail: 'Clip-Mikrofon vorhanden (Phantomspeisung)' },
+  { instrument: 'Keyboard', detail: 'Stereo' },
+  { instrument: 'Gitarre', detail: 'Mikrofon am Verstärker (mono)' },
+  { instrument: 'Blues Harp', detail: 'Gesangsmikrofon' },
+  { instrument: 'Trompete', detail: 'Clip-Mikrofon vorhanden (Phantomspeisung), In-Ear-Monitoring' },
+  { instrument: 'Posaune', detail: 'Clip-Mikrofon vorhanden (Phantomspeisung), In-Ear-Monitoring' },
+  { instrument: 'Saxophon', detail: 'Clip-Mikrofon vorhanden (Phantomspeisung)' },
+  { instrument: 'Klarinette', detail: 'Gesangsmikrofon' },
+  { instrument: 'Gesang', detail: 'Gesangsmikrofon' },
+  { instrument: 'Lead Vocal', detail: 'Funkmikrofon' },
+];
+
 /** Bisherige Band-Highlights */
 export const highlights = [
   'Savognin Bergbahnen',

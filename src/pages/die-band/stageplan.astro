@@ -1,18 +1,23 @@
 ---
 import { breadcrumbSchema } from '../../lib/schema';
 import Base from '../../layouts/Base.astro';
+import { stageSetup } from '../../data/site';
 import { url } from '../../lib/util';
 
 const pdf = url('/downloads/Stage-setup_moonstruck.pdf');
 const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { name: 'Stageplan', path: '/die-band/stageplan/' }])];
 ---
 
-<Base title="Stageplan" description="Stageplan und Bühnensetup von moonstruck für Techniker und Veranstalter." jsonLd={jsonLd}>
+<Base
+  title="Stageplan"
+  description="Stageplan und Technik der Band moonstruck für Techniker und Veranstalter: Bühnenaufstellung, Mikrofonierung, In-Ear-Monitoring."
+  jsonLd={jsonLd}
+>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Stageplan</span>
       <h1>Technik und Bühne <span class="hl">für Veranstalter</span></h1>
-      <p class="lead">Hier der Moonstruck-Stageplan für die Techniker.</p>
+      <p class="lead">Bühnenaufstellung und Mikrofonierung der moonstruck für die Techniker.</p>
       <a class="btn btn--accent" href={pdf} download>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"
           ><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"></path></svg
@@ -21,9 +26,82 @@ const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { nam
       </a>
     </header>
 
-    <object class="pdf sheet" data={pdf} type="application/pdf" aria-label="Stageplan moonstruck">
-      <p class="fallback">Die Vorschau kann in diesem Browser nicht angezeigt werden. <a href={pdf}>PDF öffnen</a></p>
-    </object>
+    <section class="plan sheet" aria-labelledby="buehne">
+      <h2 id="buehne">Bühnenaufstellung</h2>
+      <!-- Nachgezeichnet nach dem PDF; Lead Vocal steht vorne (unten) -->
+      <svg class="stage" viewBox="0 0 800 370" role="img" aria-labelledby="stage-title stage-desc">
+        <title id="stage-title">Bühnenplan moonstruck</title>
+        <desc id="stage-desc">
+          Hinten Mitte Schlagzeug, hinten rechts Piano, links Gitarre und Blues Harp, rechts der Mitte der Bass (Sousaphon). Vorne links die Bläserreihe mit
+          Posaune, Trompete und Saxophon/Klarinette, vorne Mitte Lead Vocal.
+        </desc>
+        <rect class="frame" x="1" y="1" width="798" height="368" rx="4"></rect>
+
+        <g transform="translate(402 77)">
+          <ellipse rx="86" ry="55"></ellipse>
+          <text y="-6">Drums</text>
+          <text y="16" class="sm">Headset-Mikrofon</text>
+        </g>
+
+        <g transform="translate(673 92) rotate(18)">
+          <rect x="-105" y="-28" width="210" height="56"></rect>
+          <text y="6">Piano</text>
+        </g>
+
+        <g transform="translate(134 127) rotate(-27)">
+          <rect x="-72" y="-48" width="144" height="96"></rect>
+          <text y="-6">Guitar</text>
+          <text y="16">Blues Harp</text>
+        </g>
+
+        <g transform="translate(541 169)">
+          <circle r="47"></circle>
+          <text y="6">Bass</text>
+        </g>
+
+        <g transform="translate(208 257) rotate(-7)">
+          <g transform="translate(-102 0)">
+            <rect x="-51" y="-37" width="102" height="74"></rect>
+            <text y="-14" class="xs">Trombone</text>
+            <text y="0" class="xs">Vocal</text>
+            <text y="14" class="xs">In-Ear</text>
+          </g>
+          <g>
+            <rect x="-51" y="-37" width="102" height="74"></rect>
+            <text y="-14" class="xs">Trumpet</text>
+            <text y="0" class="xs">Vocal</text>
+            <text y="14" class="xs">In-Ear</text>
+          </g>
+          <g transform="translate(102 0)">
+            <rect x="-51" y="-37" width="102" height="74"></rect>
+            <text y="-14" class="xs">Sax</text>
+            <text y="0" class="xs">Clarinet</text>
+            <text y="14" class="xs">Vocal</text>
+          </g>
+        </g>
+
+        <g transform="translate(474 307)">
+          <rect x="-35" y="-35" width="70" height="70"></rect>
+          <text y="-6">Lead</text>
+          <text y="16">Vocal</text>
+        </g>
+      </svg>
+    </section>
+
+    <section class="setup sheet" aria-labelledby="technik">
+      <h2 id="technik">Mikrofonierung &amp; Monitoring</h2>
+      <dl>
+        {
+          stageSetup.map((s) => (
+            <div>
+              <dt>{s.instrument}</dt>
+              <dd>{s.detail}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="note">Fragen zur Technik? <a href={url('/kontakt/')}>Kontaktieren Sie uns</a>.</p>
+    </section>
   </div>
 </Base>
 
@@ -31,14 +109,78 @@ const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { nam
   .page-head .btn {
     margin-top: 0.5rem;
   }
-  .pdf {
+  .sheet {
+    padding: clamp(20px, 4vw, 32px);
+  }
+  .sheet + .sheet {
+    margin-top: 20px;
+  }
+  .sheet h2 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .stage {
     display: block;
     width: 100%;
-    height: min(80vh, 900px);
-    border: 0;
-    overflow: hidden;
+    height: auto;
+    font-family: var(--font-body);
   }
-  .fallback {
-    padding: 2rem;
+  .stage .frame {
+    fill: #f4f8fb;
+    stroke: var(--navy-900);
+    stroke-width: 2;
+  }
+  .stage ellipse,
+  .stage circle,
+  .stage g rect {
+    fill: var(--white);
+    stroke: var(--navy-900);
+    stroke-width: 2;
+  }
+  .stage text {
+    fill: var(--navy-900);
+    font-size: 19px;
+    text-anchor: middle;
+  }
+  .stage text.sm {
+    font-size: 15px;
+  }
+  .stage text.xs {
+    font-size: 13px;
+  }
+
+  dl {
+    margin: 0;
+    display: grid;
+  }
+  dl div {
+    display: grid;
+    grid-template-columns: minmax(130px, 200px) 1fr;
+    gap: 4px 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e3ebf1;
+  }
+  dl div:last-child {
+    border-bottom: 0;
+  }
+  dt {
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  dd {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 520px) {
+    dl div {
+      grid-template-columns: 1fr;
+    }
+  }
+  .note {
+    margin: 1.25rem 0 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
   }
 </style>
