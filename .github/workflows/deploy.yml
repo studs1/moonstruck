@@ -34,6 +34,17 @@ jobs:
 
       - run: npm ci
 
+      # Bereits optimierte Bilder (AVIF/WebP) zwischen den Läufen aufbewahren:
+      # nur neue oder geänderte Bilder werden neu erzeugt (Build ~2 min → ~20 s).
+      - name: Astro-Bildcache
+        uses: actions/cache@v6
+        with:
+          path: node_modules/.astro
+          key: astro-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*.jpg', 'src/**/*.jpeg', 'src/**/*.png', 'src/**/*.webp') }}
+          restore-keys: |
+            astro-${{ hashFiles('package-lock.json') }}-
+            astro-
+
       - name: Astro build
         run: npm run build
         env:
