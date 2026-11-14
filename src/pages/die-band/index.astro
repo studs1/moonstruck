@@ -1,4 +1,5 @@
 ---
+import { breadcrumbSchema } from '../../lib/schema';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
@@ -7,9 +8,10 @@ import liveMgb from '../../assets/live-mgb.jpg';
 import { url } from '../../lib/util';
 
 const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order - b.data.order);
+const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { name: 'Die Band', path: '/die-band/' }])];
 ---
 
-<Base title="Die Band" description="Die moonstruck wurde 1995 in Visp gegründet: acht Musiker zwischen New Orleans Jazz, Street Jazz, Blues, Bebop und Funk.">
+<Base title="Die Band" description="Die moonstruck wurde 1995 in Visp gegründet: acht Musiker zwischen New Orleans Jazz, Street Jazz, Blues, Bebop und Funk." jsonLd={jsonLd}>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Die Band</span>
@@ -57,7 +59,7 @@ const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order 
           members.map((m) => (
             <li>
               <a class="panel" href={url(`/die-band/bandmitglieder/#${m.id}`)}>
-                <Image src={m.data.portrait} alt="" widths={[160, 320]} sizes="64px" />
+                <Image src={m.data.portrait} alt={`Portrait ${m.data.name}`} widths={[160, 320]} sizes="64px" />
                 <span>
                   <strong>{m.data.name}</strong>
                   <small>{m.data.instrument}</small>

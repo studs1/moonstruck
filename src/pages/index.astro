@@ -4,8 +4,10 @@ import Base from '../layouts/Base.astro';
 import GigList from '../components/GigList.astro';
 import bandPoster from '../assets/band-poster.jpg';
 import { url, upcomingGigs } from '../lib/util';
+import { eventSchema } from '../lib/schema';
 
 const next = (await upcomingGigs()).slice(0, 1);
+const jsonLd = next.map((g) => eventSchema(Astro.site, g));
 
 const tiles = [
   {
@@ -35,7 +37,7 @@ const tiles = [
 ];
 ---
 
-<Base>
+<Base jsonLd={jsonLd}>
   <div class="wrap home">
     <section class="hero">
       <div class="hero__poster">

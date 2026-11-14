@@ -3,11 +3,19 @@ import Base from '../../layouts/Base.astro';
 import GigList from '../../components/GigList.astro';
 import { highlights } from '../../data/site';
 import { url, upcomingGigs } from '../../lib/util';
+import { eventSchema, breadcrumbSchema } from '../../lib/schema';
 
 const gigs = await upcomingGigs();
+const jsonLd = [
+  ...gigs.map((g) => eventSchema(Astro.site, g)),
+  breadcrumbSchema(Astro.site, [
+    { name: 'Home', path: '/' },
+    { name: 'Höhepunkte', path: '/events/' },
+  ]),
+];
 ---
 
-<Base title="Höhepunkte" description="Kommende Auftritte und bisherige Highlights von moonstruck.">
+<Base title="Höhepunkte" description="Kommende Auftritte und bisherige Highlights von moonstruck: Konzerte der Soul-, Blues- und Jazzband aus Visp im Wallis." jsonLd={jsonLd}>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Höhepunkte</span>

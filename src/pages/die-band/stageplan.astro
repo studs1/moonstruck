@@ -1,11 +1,13 @@
 ---
+import { breadcrumbSchema } from '../../lib/schema';
 import Base from '../../layouts/Base.astro';
 import { url } from '../../lib/util';
 
 const pdf = url('/downloads/Stage-setup_moonstruck.pdf');
+const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { name: 'Stageplan', path: '/die-band/stageplan/' }])];
 ---
 
-<Base title="Stageplan" description="Stageplan und Bühnensetup von moonstruck für Techniker und Veranstalter.">
+<Base title="Stageplan" description="Stageplan und Bühnensetup von moonstruck für Techniker und Veranstalter." jsonLd={jsonLd}>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Stageplan</span>

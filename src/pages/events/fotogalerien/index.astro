@@ -2,13 +2,15 @@
 import Base from '../../../layouts/Base.astro';
 import GalleryCard from '../../../components/GalleryCard.astro';
 import { galleries } from '../../../lib/util';
+import { breadcrumbSchema } from '../../../lib/schema';
 
 const all = await galleries();
 const decadeOf = (d: Date) => Math.floor(d.getUTCFullYear() / 10) * 10;
+const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { name: 'Fotogalerien', path: '/events/fotogalerien/' }])];
 const decades = [...new Set(all.map((g) => decadeOf(g.data.date)))];
 ---
 
-<Base title="Fotogalerien" description="Fotos von Auftritten der moonstruck seit 2000." dark>
+<Base title="Fotogalerien" description="Fotogalerien von moonstruck: Bilder von Konzerten, Hochzeiten und Festen der Soul-, Blues- und Jazzband aus Visp seit 2000." dark jsonLd={jsonLd}>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Fotogalerien</span>

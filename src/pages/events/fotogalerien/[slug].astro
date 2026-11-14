@@ -5,6 +5,7 @@ import Base from '../../../layouts/Base.astro';
 import PhotoGrid, { type PhotoItem } from '../../../components/PhotoGrid.astro';
 import GigList from '../../../components/GigList.astro';
 import { galleries, url, formatMonth, placeholder, upcomingGigs } from '../../../lib/util';
+import { breadcrumbSchema, abs } from '../../../lib/schema';
 
 export async function getStaticPaths() {
   const all = await galleries();
@@ -54,14 +55,46 @@ const groups = d.kapitel
 
 const cover = items.find((it) => it.file === (d.cover ?? items[0]?.file)) ?? items[0];
 const isVideo = d.clip && /\.(mp4|webm|mov)$/i.test(d.clip.src);
+const pageUrl = abs(Astro.site, `/events/fotogalerien/${g.id}/`);
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    name: `moonstruck: ${d.title}`,
+    description: d.description,
+    url: pageUrl,
+    datePublished: d.date.toISOString().slice(0, 10),
+    contentLocation: d.ort ? { '@type': 'Place', name: d.ort } : undefined,
+    about: { '@id': abs(Astro.site, '/#band') },
+    creator: d.fotograf ? { '@type': 'Person', name: d.fotograf } : undefined,
+    numberOfItems: items.length,
+    image: items.slice(0, 12).map((it) => ({
+      '@type': 'ImageObject',
+      contentUrl: new URL(it.full.src, Astro.site).href,
+      description: it.alt,
+      caption: it.caption,
+      width: it.full.width,
+      height: it.full.height,
+    })),
+  },
+  breadcrumbSchema(Astro.site, [
+    { name: 'Home', path: '/' },
+    { name: 'Fotogalerien', path: '/events/fotogalerien/' },
+    { name: d.title, path: `/events/fotogalerien/${g.id}/` },
+  ]),
+];
+// Meta-Description: eigener Text, wenn aussagekräftig (≥ 50 Zeichen), sonst generiert (+ evtl. kurzer Text)
+const generated = `Fotos der Soul-, Blues- und Jazzband moonstruck: ${d.title}${d.ort ? ` in ${d.ort}` : ''}, ${formatMonth(d.date)}. ${items.length} Bilder.`;
+const metaDescription = d.description && d.description.length >= 50 ? `${d.description} – ${items.length} Fotos von moonstruck.` : generated;
 const metaLine = [formatMonth(d.date), d.ort, `${items.length} Fotos`].filter(Boolean).join(' · ');
 ---
 
 <Base
-  title={d.title}
-  description={d.description ?? `Fotos von moonstruck: ${d.title}${d.ort ? ` in ${d.ort}` : ''}, ${formatMonth(d.date)}. ${items.length} Bilder.`}
+  title={`${d.title} (${formatMonth(d.date)})`}
+  description={metaDescription}
   image={cover?.img}
   dark
+  jsonLd={jsonLd}
 >
   <div class="wrap">
     <a class="back" href={url('/events/fotogalerien/')}>← Alle Galerien</a>

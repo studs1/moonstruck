@@ -1,10 +1,12 @@
 ---
+import { breadcrumbSchema } from '../../lib/schema';
 import Base from '../../layouts/Base.astro';
 import AudioList from '../../components/AudioList.astro';
 import { url } from '../../lib/util';
+const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { name: 'Klangprobe', path: '/die-band/klangprobe/' }])];
 ---
 
-<Base title="Klangprobe" description="Hörproben von moonstruck: Liveaufnahmen aus diversen Konzerten.">
+<Base title="Klangprobe" description="Hörproben der Band moonstruck: Liveaufnahmen von Hello Dolly, I Feel Good, Everybody (Blues Brothers) und mehr. New Orleans Jazz, Blues und Funk aus Visp." jsonLd={jsonLd}>
   <div class="wrap narrow">
     <header class="page-head">
       <span class="eyebrow">Klangprobe</span>

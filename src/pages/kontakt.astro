@@ -1,11 +1,13 @@
 ---
+import { breadcrumbSchema } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 import { contact } from '../data/site';
 
 const tel = contact.phone.replace(/\s/g, '');
+const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { name: 'Kontakt', path: '/kontakt/' }])];
 ---
 
-<Base title="Kontakt" description="moonstruck buchen: Kontakt für Anfragen, Engagements und Demo-CDs.">
+<Base title="Kontakt" description="moonstruck buchen: Jazz-, Soul- und Bluesband für Hochzeit, Firmenfest, Festival oder Konzert im Wallis und in der ganzen Schweiz. Kontakt in Visp." jsonLd={jsonLd}>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Kontakt</span>

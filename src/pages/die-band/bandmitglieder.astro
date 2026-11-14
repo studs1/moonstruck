@@ -1,12 +1,14 @@
 ---
+import { breadcrumbSchema } from '../../lib/schema';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 
 const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order - b.data.order);
+const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { name: 'Die Band', path: '/die-band/' }, { name: 'Bandmitglieder', path: '/die-band/bandmitglieder/' }])];
 ---
 
-<Base title="Bandmitglieder" description="Die acht Musiker von moonstruck und ihre Instrumente.">
+<Base title="Bandmitglieder" description="Die acht Musiker der Jazz- und Soulband moonstruck aus Visp: Klarinette, Saxophon, Trompete, Posaune, Piano, Gitarre, Sousaphon, Schlagzeug und Gesang." jsonLd={jsonLd}>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Die Band</span>

@@ -80,3 +80,15 @@ Umstellung:
    - `www` → `CNAME` → `<user>.github.io`
    - `@` (Apex) → `A` auf `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
 3. Workflow einmal neu laufen lassen (Actions → *Run workflow*), damit die Links ohne `/<repo>` gebaut werden.
+
+## SEO & KI
+
+Wird bei jedem Build automatisch erzeugt, nichts zu pflegen:
+
+- `sitemap-index.xml` und `robots.txt` (alle Suchmaschinen und KI-Crawler erlaubt)
+- `llms.txt`: Zusammenfassung der Website für KI-Assistenten (Band, Kontakt, Termine, Mitglieder, Galerien)
+- Strukturierte Daten (schema.org/JSON-LD): `MusicGroup` (Band), `MusicEvent` (jeder Auftritt → Google-Veranstaltungen), `ImageGallery`, Brotkrumen
+- Titel, Meta-Description, Canonical, Open-Graph-Vorschaubild auf jeder Seite
+
+Nach der Umstellung auf www.moonstruck.ch: Website in der [Google Search Console](https://search.google.com/search-console) anmelden und `https://www.moonstruck.ch/sitemap-index.xml` einreichen.
+Strukturierte Daten prüfen: [Rich Results Test](https://search.google.com/test/rich-results).

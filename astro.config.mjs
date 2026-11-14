@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // SITE / BASE_PATH werden in der GitHub-Action gesetzt (actions/configure-pages).
 // Solange die Seite unter <user>.github.io/<repo> läuft, ist BASE_PATH z.B. "/moonstruck";
@@ -30,6 +31,15 @@ export default defineConfig({
   base,
   trailingSlash: 'ignore',
   redirects,
+  integrations: [
+    sitemap({
+      // Umleitungsseiten (alte Jimdo-URLs) und 404 gehören nicht in die Sitemap
+      filter: (page) => {
+        const path = decodeURIComponent(new URL(page).pathname);
+        return !path.includes('/404') && !Object.keys(redirects).some((r) => path.endsWith(r + '/') || path.endsWith(r));
+      },
+    }),
+  ],
   image: {
     responsiveStyles: true,
   },
