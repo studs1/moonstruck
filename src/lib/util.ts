@@ -25,12 +25,30 @@ const galleryImages = import.meta.glob<{ default: ImageMetadata }>('/src/content
   eager: true,
 });
 
-export function imagesOf(slug: string): { file: string; img: ImageMetadata }[] {
+export function imagesOf(slug: string): { file: string; path: string; img: ImageMetadata }[] {
   const prefix = `/src/content/galerien/${slug}/`;
   return Object.entries(galleryImages)
     .filter(([p]) => p.startsWith(prefix))
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([p, m]) => ({ file: p.slice(prefix.length), img: m.default }));
+    .map(([p, m]) => ({ file: p.slice(prefix.length), path: p, img: m.default }));
+}
+
+/**
+ * Winziges, unscharfes Vorschaubild (ca. 300 Bytes) als Data-URI.
+ * Wird als Hintergrund angezeigt, bis das richtige Bild geladen ist (ähnlich BlurHash/ThumbHash).
+ */
+const placeholderCache = new Map<string, string>();
+export async function placeholder(srcPath: string): Promise<string> {
+  const cached = placeholderCache.get(srcPath);
+  if (cached) return cached;
+  const { default: sharp } = await import('sharp');
+  const { join } = await import('node:path');
+  // Build läuft im Projektverzeichnis; srcPath ist z.B. "/src/content/galerien/x/001.jpg"
+  const file = join(process.cwd(), srcPath);
+  const buf = await sharp(file).resize(16, 16, { fit: 'inside' }).webp({ quality: 40 }).toBuffer();
+  const uri = `data:image/webp;base64,${buf.toString('base64')}`;
+  placeholderCache.set(srcPath, uri);
+  return uri;
 }
 
 export async function galleries() {

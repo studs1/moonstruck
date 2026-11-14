@@ -60,6 +60,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Dunkle Variante für Fotogalerien: Bühnenlicht und Farben kommen besser zur Geltung */
+body.dark {
+  background: linear-gradient(180deg, var(--navy-700) 0, #071f33 360px, #04131f 100%);
+}
+
 main {
   flex: 1;
 }

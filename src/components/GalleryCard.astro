@@ -8,9 +8,10 @@ interface Props {
   title: string;
   date: Date;
   count: number;
+  ort?: string;
   cover?: ImageMetadata;
 }
-const { slug, title, date, count, cover } = Astro.props;
+const { slug, title, date, count, cover, ort } = Astro.props;
 ---
 
 <a class="gcard" href={url(`/events/fotogalerien/${slug}/`)}>
@@ -19,7 +20,7 @@ const { slug, title, date, count, cover } = Astro.props;
     <span class="gcard__count">{count} Fotos</span>
   </div>
   <div class="gcard__body">
-    <span class="gcard__date">{formatMonth(date)}</span>
+    <span class="gcard__date">{formatMonth(date)}{ort && ` · ${ort}`}</span>
     <h3>{title}</h3>
   </div>
 </a>

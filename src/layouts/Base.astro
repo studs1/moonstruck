@@ -5,15 +5,27 @@ import header from '../assets/header.jpg';
 import { nav } from '../data/site';
 import { url } from '../lib/util';
 
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import defaultShare from '../assets/live-stage.jpg';
+
 interface Props {
   title?: string;
   description?: string;
+  /** Vorschaubild für WhatsApp/Social Media */
+  image?: ImageMetadata;
+  /** Dunkler Hintergrund (z.B. Fotogalerien) */
+  dark?: boolean;
 }
 
 const {
   title,
   description = 'moonstruck – Soul, Blues & Jazz aus Visp. New Orleans Jazz, Street Jazz, Blues, Bebop und Funk für Party- und Konzertpublikum.',
+  image = defaultShare,
+  dark = false,
 } = Astro.props;
+const share = await getImage({ src: image, width: 1200, format: 'jpg' });
+const shareUrl = new URL(share.src, Astro.site);
 
 const fullTitle = title ? `${title} | moonstruck` : 'moonstruck – soul blues jazz';
 const current = (Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/').replace(/\/?$/, '/');
@@ -40,8 +52,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="de_CH" />
+    <meta property="og:image" content={shareUrl} />
+    <meta property="og:image:width" content={String(share.attributes.width ?? 1200)} />
+    <meta property="og:image:height" content={String(share.attributes.height ?? '')} />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
-  <body>
+  <body class:list={[{ dark }]}>
     <a class="skip" href="#main">Zum Inhalt springen</a>
 
     <header class="masthead">

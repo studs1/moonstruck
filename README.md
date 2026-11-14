@@ -39,17 +39,36 @@ link: https://...      # optional
 
 ### Fotogalerie
 
+Nur `title` und `date` sind Pflicht, alles andere ist optional (vollständiges Beispiel: `src/content/galerien/staldbach2023/index.md`).
+
 ```md
 ---
 title: Jazzchälli Visp
 date: 2024-09-01
-description: Optionaler Text unter dem Titel
-cover: 003.jpg         # optional, sonst erstes Bild
+ort: Visp
+description: Ein Satz für Untertitel, Google und WhatsApp-Vorschau
+cover: 003.jpg                   # Titelbild, sonst das erste
+fotograf: Vorname Nachname
+setlist: ["Hello Dolly", "I Feel Good", "Everybody Needs Somebody"]
+clip: { src: /video/jazzchaelli-2024.mp4, titel: "Ausschnitt", poster: /video/jazzchaelli-2024.jpg }
+kapitel:                         # Bilder gruppieren; Rest erscheint unter «Weitere Bilder»
+  - titel: Soundcheck
+    bilder: ["001.jpg", "002.jpg"]
+  - titel: Konzert
+    text: Optionaler Satz zum Kapitel
+    bilder: ["003.jpg", "004.jpg"]
+bilder:                          # Alt-Text (Barrierefreiheit/Google) und Legende pro Bild
+  "003.jpg": { alt: "Die ganze Band auf der Bühne", text: "Zugabe um Mitternacht" }
 ---
+
+Hier ein paar Sätze zum Abend (Markdown). Erscheint als Einleitung unter dem Titelbild.
 ```
 
-Alle Bilder im Ordner werden alphabetisch angezeigt (z.B. `001.jpg`, `002.jpg`, …).
-Bilder vorher auf max. ca. 2000 px Kantenlänge verkleinern; Astro erzeugt beim Build automatisch optimierte WebP-Varianten.
+Alle Bilder im Ordner werden angezeigt (alphabetisch, z.B. `001.jpg`, `002.jpg`, …), im Originalformat ohne Beschnitt.
+Bilder vorher auf max. ca. 2000 px Kantenlänge verkleinern. Astro erzeugt beim Build AVIF/WebP in mehreren Grössen und einen unscharfen Platzhalter.
+Videos und Audioclips liegen in `public/video/` bzw. `public/audio/` (kurz halten, MP4/H.264 bzw. MP3).
+
+Jedes Bild hat einen teilbaren Link, z.B. `/events/fotogalerien/staldbach2023/#foto-3`.
 
 ## Domain www.moonstruck.ch
 

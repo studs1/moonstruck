@@ -8,7 +8,7 @@ const decadeOf = (d: Date) => Math.floor(d.getUTCFullYear() / 10) * 10;
 const decades = [...new Set(all.map((g) => decadeOf(g.data.date)))];
 ---
 
-<Base title="Fotogalerien" description="Fotos von Auftritten der moonstruck seit 2000.">
+<Base title="Fotogalerien" description="Fotos von Auftritten der moonstruck seit 2000." dark>
   <div class="wrap">
     <header class="page-head">
       <span class="eyebrow">Fotogalerien</span>
@@ -30,7 +30,7 @@ const decades = [...new Set(all.map((g) => decadeOf(g.data.date)))];
             {all
               .filter((g) => decadeOf(g.data.date) === d)
               .map((g) => (
-                <GalleryCard slug={g.id} title={g.data.title} date={g.data.date} count={g.images.length} cover={g.cover?.img} />
+                <GalleryCard slug={g.id} title={g.data.title} date={g.data.date} count={g.images.length} cover={g.cover?.img} ort={g.data.ort} />
               ))}
           </div>
         </section>
