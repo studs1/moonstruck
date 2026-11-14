@@ -1,5 +1,0 @@
----
-date: 2026-12-04
-title: Jazzchälli
-ort: Visp
----
