@@ -25,7 +25,7 @@ const gigs = (await upcomingGigs()).slice(0, 1);
 const items: (PhotoItem & { file: string })[] = await Promise.all(
   g.images.map(async ({ file, path, img }, i) => {
     const meta = d.bilder?.[file] ?? {};
-    const big = await getImage({ src: img, widths: [1000, 1600, 2000].filter((w) => w <= img.width), format: 'webp' });
+    const big = await getImage({ src: img, widths: [1200, 2000].filter((w) => w <= img.width), format: 'webp' });
     const largest = Math.min(img.width, 2000);
     return {
       file,
@@ -106,7 +106,8 @@ const metaLine = [formatMonth(d.date), d.ort, `${items.length} Fotos`].filter(Bo
             <Picture
               src={cover.img}
               alt={cover.alt}
-              formats={['avif', 'webp']}
+              formats={['avif']}
+            fallbackFormat="webp"
               widths={[640, 1040, 1600]}
               sizes="(max-width: 1040px) 100vw, 1040px"
               loading="eager"
