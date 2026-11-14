@@ -42,18 +42,18 @@ const gigs = await upcomingGigs();
   }
   .hl-list li {
     position: relative;
-    padding: 13px 16px 13px 42px;
+    padding: 13px 16px 13px 46px;
     font-size: 0.95rem;
   }
   .hl-list li::before {
     content: '';
     position: absolute;
     left: 16px;
-    top: 50%;
-    width: 14px;
-    height: 14px;
-    margin-top: -7px;
-    border-radius: 50%;
-    box-shadow: inset -4px 2px 0 0 var(--accent);
+    top: 14px;
+    width: 19px;
+    height: 19px;
+    background: var(--accent);
+    -webkit-mask: var(--sichel) center / contain no-repeat;
+    mask: var(--sichel) center / contain no-repeat;
   }
 </style>

@@ -28,6 +28,9 @@
   --font-display: 'Montserrat Variable', system-ui, sans-serif;
   --font-body: 'Inter Variable', system-ui, sans-serif;
 
+  /* Mondsichel = erstes "o" aus dem Logo (gleiche Form wie public/favicon.svg), als CSS-Maske nutzbar */
+  --sichel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='4 4 56 56'%3E%3Cmask id='m'%3E%3Crect x='0' y='0' width='64' height='64' fill='%23fff'/%3E%3Ccircle cx='29.59' cy='28.49' r='24.78'/%3E%3C/mask%3E%3Ccircle cx='32' cy='32' r='28' fill='%23fff' mask='url(%23m)'/%3E%3C/svg%3E");
+
   --radius: 10px;
   --radius-lg: 14px;
   --shadow: 0 10px 30px rgb(2 26 43 / 0.25);
