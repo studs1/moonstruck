@@ -48,7 +48,16 @@ const long = new Intl.DateTimeFormat('de-CH', { weekday: 'long', day: '2-digit',
               )}
             </p>
           </div>
-          {i === 0 && <slot />}
+          {(g.data.tickets || i === 0) && (
+            <div class="gig__actions">
+              {g.data.tickets && (
+                <a class="btn btn--accent" href={g.data.tickets} rel="noopener" target="_blank">
+                  Tickets
+                </a>
+              )}
+              {i === 0 && <slot />}
+            </div>
+          )}
         </li>
       ))}
     </ul>
@@ -103,6 +112,11 @@ const long = new Intl.DateTimeFormat('de-CH', { weekday: 'long', day: '2-digit',
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 500;
+  }
+  .gig__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   .gig__meta {
     margin: 0;

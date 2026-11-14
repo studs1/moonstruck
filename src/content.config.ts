@@ -66,7 +66,10 @@ const auftritte = defineCollection({
     title: z.string(),
     ort: z.string(),
     zeit: z.string().optional(),
+    /** Link mit weiteren Infos zum Anlass */
     link: z.url().optional(),
+    /** Link zum Ticketverkauf */
+    tickets: z.url().optional(),
   }),
 });
 

@@ -34,7 +34,7 @@ export const GET: APIRoute = async ({ site }) => {
 
 ## Nächste öffentliche Auftritte
 
-${gigs.length ? gigs.map((g) => `- ${formatDate(g.data.date)}${g.data.zeit ? `, ${g.data.zeit}` : ''}: ${g.data.title}, ${g.data.ort}`).join('\n') : '- Zurzeit keine öffentlichen Auftritte geplant.'}
+${gigs.length ? gigs.map((g) => `- ${formatDate(g.data.date)}${g.data.zeit ? `, ${g.data.zeit}` : ''}: ${g.data.title}, ${g.data.ort}${g.data.tickets ? ` – [Tickets](${g.data.tickets})` : ''}`).join('\n') : '- Zurzeit keine öffentlichen Auftritte geplant.'}
 
 ## Bandmitglieder
 

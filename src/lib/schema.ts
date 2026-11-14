@@ -72,7 +72,8 @@ export function eventSchema(site: URL | undefined, g: CollectionEntry<'auftritte
     },
     performer: { '@id': abs(site, '/#band') },
     image,
-    url: g.data.link ?? abs(site, '/events/'),
+    url: g.data.link ?? g.data.tickets ?? abs(site, '/events/'),
+    offers: g.data.tickets ? { '@type': 'Offer', url: g.data.tickets, availability: 'https://schema.org/InStock' } : undefined,
     description: `moonstruck (soul blues jazz) live: ${g.data.title}, ${g.data.ort}.`,
   };
 }

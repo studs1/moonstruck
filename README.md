@@ -33,7 +33,8 @@ date: 2027-03-20
 title: Jazznacht
 ort: Brig
 zeit: 20:00 Uhr        # optional
-link: https://...      # optional
+link: https://...      # optional, Infos zum Anlass
+tickets: https://...   # optional, zeigt einen «Tickets»-Knopf
 ---
 ```
 
