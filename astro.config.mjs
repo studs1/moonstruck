@@ -5,7 +5,8 @@ import sitemap from '@astrojs/sitemap';
 // SITE / BASE_PATH werden in der GitHub-Action gesetzt (actions/configure-pages).
 // Solange die Seite unter <user>.github.io/<repo> läuft, ist BASE_PATH z.B. "/moonstruck";
 // sobald www.moonstruck.ch als Custom Domain hinterlegt ist, ist BASE_PATH leer.
-const site = process.env.SITE || 'https://www.moonstruck.ch';
+// Immer https verwenden: configure-pages liefert "http://…", solange "Enforce HTTPS" noch nicht aktiv ist.
+const site = (process.env.SITE || 'https://www.moonstruck.ch').replace(/^http:\/\//, 'https://');
 const base = process.env.BASE_PATH || '/';
 
 // Alte Jimdo-URLs (Umlaute, Einzelseiten der Mitglieder) auf neue Seiten umleiten
