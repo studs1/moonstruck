@@ -33,19 +33,21 @@ const long = new Intl.DateTimeFormat('de-CH', { weekday: 'long', day: '2-digit',
           <div class="gig__body">
             {label && <span class="eyebrow">{label}</span>}
             <p class="gig__title">
-              {g.data.title}, {g.data.ort}
+              {
+                g.data.link ? (
+                  <a href={g.data.link} rel="noopener" target="_blank" title={`Website: ${g.data.title}`}>
+                    {g.data.title}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" /></svg>
+                  </a>
+                ) : (
+                  g.data.title
+                )
+              }
+              , {g.data.ort}
             </p>
             <p class="gig__meta">
               {long.format(g.data.date)}
               {g.data.zeit && <> · {g.data.zeit}</>}
-              {g.data.link && (
-                <>
-                  {' · '}
-                  <a href={g.data.link} rel="noopener">
-                    Infos
-                  </a>
-                </>
-              )}
             </p>
           </div>
           {(g.data.tickets || i === 0) && (
@@ -112,6 +114,26 @@ const long = new Intl.DateTimeFormat('de-CH', { weekday: 'long', day: '2-digit',
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 500;
+  }
+  .gig__title a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgb(134 208 242 / 0.6);
+    text-underline-offset: 4px;
+  }
+  .gig__title a:hover {
+    color: var(--accent);
+  }
+  .gig__title svg {
+    width: 0.75em;
+    height: 0.75em;
+    margin-left: 2px;
+    vertical-align: 0.05em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
   .gig__actions {
     display: flex;
