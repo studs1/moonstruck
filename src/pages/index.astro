@@ -2,161 +2,200 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import GigList from '../components/GigList.astro';
-import AudioList from '../components/AudioList.astro';
-import GalleryCard from '../components/GalleryCard.astro';
-import liveStage from '../assets/live-stage.jpg';
 import bandPoster from '../assets/band-poster.jpg';
-import { repertoire } from '../data/site';
-import { url, upcomingGigs, galleries } from '../lib/util';
+import { url, upcomingGigs } from '../lib/util';
 
-const gigs = (await upcomingGigs()).slice(0, 3);
-const latest = (await galleries()).slice(0, 3);
+const next = (await upcomingGigs()).slice(0, 1);
+
+const tiles = [
+  {
+    href: '/die-band/',
+    title: 'Die Band',
+    text: 'Die Musiker hinter Moonstruck.',
+    icon: '<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8"/><circle cx="16.5" cy="9" r="2.4"/><path d="M15.5 14.4c2.6-.3 4.6 1.3 5 4.1"/>',
+  },
+  {
+    href: '/die-band/klangprobe/',
+    title: 'Klangprobe',
+    text: 'Reinhören, bevor Sie buchen.',
+    icon: '<path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
+  },
+  {
+    href: '/die-band/stageplan/',
+    title: 'Stageplan',
+    text: 'Technik und Bühne für Veranstalter.',
+    icon: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10.5" r="1.6"/><circle cx="15.5" cy="10.5" r="1.6"/><path d="M7 15.5h10"/>',
+  },
+  {
+    href: '/events/fotogalerien/',
+    title: 'Fotogalerien',
+    text: 'Höhepunkte vergangener Auftritte.',
+    icon: '<rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.5-2.5h4l1.5 2.5"/><circle cx="12" cy="13" r="3.3"/>',
+  },
+];
 ---
 
 <Base>
-  <section class="section section--dark moon hero">
-    <div class="wrap grid-2">
-      <div>
-        <span class="eyebrow">Seit 1995 · aus Visp</span>
-        <h1>Soul, Blues &amp; Jazz,<br />der ins Blut geht.</h1>
-        <p class="lead">
-          New Orleans Jazz, Street Jazz, Blues, Bebop und Funk. Kurz: einfach alles, was ein Party- und Konzertpublikum verzaubert.
-        </p>
-        <ul class="tags" aria-label="Repertoire">
-          {repertoire.map((r) => <li>{r}</li>)}
-        </ul>
+  <div class="wrap home">
+    <section class="hero">
+      <div class="hero__poster">
+        <Image src={bandPoster} alt="Bandfoto moonstruck: acht Musiker im Anzug" widths={[260, 400, 560]} sizes="(max-width: 720px) 200px, 186px" loading="eager" />
+      </div>
+      <div class="hero__text">
+        <h1>moonstruck,<br /><span class="hl">soul blues jazz</span></h1>
+        <p class="lead">New Orleans Jazz, Street Jazz, Blues, Bebop und Funk. Kurz: einfach alles, was ein Party- und Konzertpublikum verzaubert.</p>
         <div class="hero__cta">
-          <a class="btn btn--light" href={url('/kontakt/')}>moonstruck buchen</a>
-          <a class="btn btn--ghost" href={url('/die-band/klangprobe/')}>
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
-            Reinhören
+          <a class="btn btn--accent" href={url('/kontakt/')}>Band buchen</a>
+          <a class="btn btn--outline" href={url('/die-band/klangprobe/')}>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+            Klangprobe hören
           </a>
         </div>
       </div>
-      <div class="hero__media">
-        <Image src={liveStage} alt="moonstruck live auf der Bühne im Jazzchälli Visp" widths={[600, 900, 1300]} sizes="(max-width: 860px) 100vw, 560px" loading="eager" />
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section section--white">
-    <div class="wrap grid-2">
-      <div class="band-photo">
-        <Image src={bandPoster} alt="Die acht Musiker von moonstruck" widths={[500, 800, 1030]} sizes="(max-width: 860px) 100vw, 520px" />
-      </div>
+    <section aria-label="Nächster Auftritt">
+      <GigList gigs={next} label="Nächster Auftritt">
+        <a class="btn btn--outline" href={url('/events/')}>Alle Termine</a>
+      </GigList>
+    </section>
+
+    <section class="tiles" aria-label="Entdecken">
+      {
+        tiles.map((t) => (
+          <a class="tile panel" href={url(t.href)}>
+            <svg class="tile__icon" viewBox="0 0 24 24" aria-hidden="true" set:html={t.icon} />
+            <h2>{t.title}</h2>
+            <p>{t.text}</p>
+          </a>
+        ))
+      }
+    </section>
+
+    <section class="cta sheet">
       <div>
-        <span class="eyebrow">Die Band</span>
-        <h2>Acht Musiker, ein Sound</h2>
-        <p class="lead">
-          Gegründet 1995 in Visp, verwurzelt im traditionellen New Orleans Jazz und seit 1998 mit Lead Vocal unterwegs zu Blues Brothers, The
-          Commitments und James Brown.
-        </p>
-        <p>
-          Ob auf der Bühne mit voller Anlage oder als Street-Band mitten im Publikum ganz ohne Verstärker: moonstruck bringt Swing an jeden Anlass,
-          von der Hochzeit über das Firmenfest bis zum Open Air.
-        </p>
-        <a class="btn btn--primary" href={url('/die-band/')}>Die Band kennenlernen →</a>
+        <h2>Moonstruck an Ihrem Anlass?</h2>
+        <p>Firmenfest, Hochzeit oder Konzert – wir freuen uns auf Ihre Anfrage.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="section section--dark">
-    <div class="wrap grid-2 top">
-      <div>
-        <span class="eyebrow">Auftritte</span>
-        <h2>Live erleben</h2>
-        <GigList gigs={gigs} />
-        <p class="more"><a href={url('/events/')}>Alle Auftritte &amp; Highlights →</a></p>
-      </div>
-      <div>
-        <span class="eyebrow">Klangprobe</span>
-        <h2>Reinhören</h2>
-        <AudioList limit={4} />
-        <p class="more"><a href={url('/die-band/klangprobe/')}>Alle Klangproben →</a></p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Fotogalerien</span>
-          <h2>Zuletzt unterwegs</h2>
-        </div>
-        <a class="btn btn--primary" href={url('/events/fotogalerien/')}>Alle Galerien →</a>
-      </div>
-      <div class="cards">
-        {latest.map((g) => <GalleryCard slug={g.id} title={g.data.title} date={g.data.date} count={g.images.length} cover={g.cover?.img} />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--dark moon cta">
-    <div class="wrap">
-      <h2>Swing für Ihren Anlass?</h2>
-      <p class="lead">Hochzeit, Firmenevent, Festival oder Apéro: Wir freuen uns auf Ihre Anfrage.</p>
-      <a class="btn btn--light" href={url('/kontakt/')}>Kontakt aufnehmen</a>
-    </div>
-  </section>
+      <a class="btn btn--dark" href={url('/kontakt/')}>Kontakt aufnehmen</a>
+    </section>
+  </div>
 </Base>
 
 <style>
+  .home {
+    display: grid;
+    gap: clamp(28px, 4.5vw, 48px);
+    padding-top: clamp(32px, 5vw, 48px);
+  }
+
   .hero {
-    padding-top: clamp(40px, 6vw, 80px);
+    display: grid;
+    grid-template-columns: 186px 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .hero__poster :global(img) {
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: 0 14px 30px rgb(0 0 0 / 0.35);
+  }
+  .hero__text {
+    max-width: 440px;
   }
   .hero h1 {
-    margin-bottom: 0.4em;
-  }
-  .hero .tags {
-    margin: 1.5rem 0 2rem;
+    margin-bottom: 0.45em;
   }
   .hero__cta {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
+    margin-top: 1.4rem;
   }
-  .hero__media :global(img) {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
   }
-  .band-photo :global(img) {
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    max-height: 640px;
-    width: auto;
-    margin-inline: auto;
+  .tile {
+    display: block;
+    padding: 22px 18px 24px;
+    color: var(--white);
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease;
   }
-  .top {
-    align-items: start;
+  .tile:hover {
+    background: var(--panel-hover);
+    color: var(--white);
+    transform: translateY(-2px);
   }
-  .more {
-    margin-top: 1.25rem;
+  .tile__icon {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 14px;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .section-head {
+  .tile h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.6em;
+  }
+  .tile p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--text-soft);
+    max-width: 18ch;
+  }
+
+  .cta {
     display: flex;
     flex-wrap: wrap;
-    align-items: end;
+    align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 32px;
+    gap: 20px 32px;
+    padding: clamp(24px, 4vw, 32px) clamp(24px, 4vw, 30px);
   }
-  .section-head h2 {
+  .cta h2 {
+    font-size: clamp(1.45rem, 3vw, 1.9rem);
+    font-weight: 300;
+    margin-bottom: 0.3em;
+  }
+  .cta p {
     margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
   }
-  .cards {
-    display: grid;
-    gap: 24px;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+  @media (max-width: 860px) {
+    .tiles {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
-  .cta {
-    text-align: center;
+  @media (max-width: 720px) {
+    .hero {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      gap: 24px;
+    }
+    .hero__poster {
+      width: 180px;
+    }
+    .hero__cta {
+      justify-content: center;
+    }
   }
-  .cta .lead {
-    margin-inline: auto;
-    max-width: 50ch;
+  @media (max-width: 420px) {
+    .tiles {
+      grid-template-columns: 1fr;
+    }
+    .tile p {
+      max-width: none;
+    }
   }
 </style>

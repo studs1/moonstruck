@@ -22,17 +22,15 @@ const images = await Promise.all(
 ---
 
 <Base title={g.data.title} description={`Fotos: ${g.data.title} (${formatMonth(g.data.date)}) – moonstruck soul blues jazz`}>
-  <section class="section--dark moon page-head">
-    <div class="wrap">
+  <div class="wrap">
+    <header class="page-head">
       <a class="back" href={url('/events/fotogalerien/')}>← Alle Galerien</a>
       <span class="eyebrow">{formatMonth(g.data.date)} · {g.images.length} Fotos</span>
       <h1>{g.data.title}</h1>
       {g.data.description && <p class="lead">{g.data.description}</p>}
-    </div>
-  </section>
+    </header>
 
-  <section class="section">
-    <div class="wrap">
+    <section>
       <div class="masonry" data-gallery>
         {
           images.map(({ img, full }, i) => (
@@ -47,8 +45,8 @@ const images = await Promise.all(
         {prev ? <a href={url(`/events/fotogalerien/${prev.id}/`)}>← {prev.data.title}</a> : <span />}
         {next && <a href={url(`/events/fotogalerien/${next.id}/`)}>{next.data.title} →</a>}
       </nav>
-    </div>
-  </section>
+    </section>
+  </div>
   <Lightbox />
 </Base>
 
@@ -93,7 +91,7 @@ const images = await Promise.all(
     gap: 16px;
     margin-top: 48px;
     padding-top: 24px;
-    border-top: 1px solid var(--blue-100);
+    border-top: 1px solid rgb(255 255 255 / 0.18);
     font-family: var(--font-display);
     font-weight: 500;
   }

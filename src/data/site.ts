@@ -9,23 +9,18 @@ export const contact = {
   email: 'info@moonstruck.ch',
 };
 
+/** Hauptnavigation (letzter Eintrag "Kontakt" wird als Button dargestellt) */
 export const nav = [
   { href: '/', label: 'Home' },
-  {
-    href: '/die-band/',
-    label: 'Die Band',
-    children: [
-      { href: '/die-band/bandmitglieder/', label: 'Bandmitglieder' },
-      { href: '/die-band/klangprobe/', label: 'Klangprobe' },
-      { href: '/die-band/stageplan/', label: 'Stageplan' },
-    ],
-  },
-  { href: '/events/', label: 'Auftritte' },
+  { href: '/die-band/', label: 'Die Band' },
+  { href: '/die-band/klangprobe/', label: 'Klangprobe' },
+  { href: '/die-band/stageplan/', label: 'Stageplan' },
+  { href: '/events/', label: 'Höhepunkte' },
   { href: '/events/fotogalerien/', label: 'Fotogalerien' },
-  { href: '/kontakt/', label: 'Kontakt' },
+  { href: '/kontakt/', label: 'Kontakt', button: true },
 ];
 
-export const repertoire = ['New Orleans Jazz', 'Street Jazz', 'Blues', 'Bebop', 'Funk', 'Soul'];
+export const repertoire = ['New Orleans Jazz', 'Street Jazz', 'Blues', 'Bebop', 'Funk'];
 
 /** Klangproben: Dateien liegen in public/audio/ */
 export const sounds = [

@@ -4,42 +4,39 @@ import GalleryCard from '../../../components/GalleryCard.astro';
 import { galleries } from '../../../lib/util';
 
 const all = await galleries();
-const decades = [...new Set(all.map((g) => Math.floor(g.data.date.getUTCFullYear() / 10) * 10))];
+const decadeOf = (d: Date) => Math.floor(d.getUTCFullYear() / 10) * 10;
+const decades = [...new Set(all.map((g) => decadeOf(g.data.date)))];
 ---
 
 <Base title="Fotogalerien" description="Fotos von Auftritten der moonstruck seit 2000.">
-  <section class="section--dark moon page-head">
-    <div class="wrap">
+  <div class="wrap">
+    <header class="page-head">
       <span class="eyebrow">Fotogalerien</span>
-      <h1>Bilder von unterwegs</h1>
+      <h1>Höhepunkte <span class="hl">vergangener Auftritte</span></h1>
       <p class="lead">
         Unter dieser Rubrik werden laufend die «schgandalösesten» Bilder der moonstruck veröffentlicht. Für allfällige Schäden wird jegliche Haftung
         abgelehnt.
       </p>
       <nav class="filter" aria-label="Nach Jahrzehnt springen">
-        {decades.map((d) => <a href={`#d${d}`}>{d}er</a>)}
+        {decades.map((d) => <a class="btn btn--outline" href={`#d${d}`}>{d}er</a>)}
       </nav>
-    </div>
-  </section>
+    </header>
 
-  <section class="section">
-    <div class="wrap">
-      {
-        decades.map((d) => (
-          <section class="decade" id={`d${d}`}>
-            <h2>{d}er</h2>
-            <div class="cards">
-              {all
-                .filter((g) => Math.floor(g.data.date.getUTCFullYear() / 10) * 10 === d)
-                .map((g) => (
-                  <GalleryCard slug={g.id} title={g.data.title} date={g.data.date} count={g.images.length} cover={g.cover?.img} />
-                ))}
-            </div>
-          </section>
-        ))
-      }
-    </div>
-  </section>
+    {
+      decades.map((d) => (
+        <section class="decade" id={`d${d}`}>
+          <h2>{d}er</h2>
+          <div class="cards">
+            {all
+              .filter((g) => decadeOf(g.data.date) === d)
+              .map((g) => (
+                <GalleryCard slug={g.id} title={g.data.title} date={g.data.date} count={g.images.length} cover={g.cover?.img} />
+              ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
 </Base>
 
 <style>
@@ -47,27 +44,27 @@ const decades = [...new Set(all.map((g) => Math.floor(g.data.date.getUTCFullYear
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
   }
-  .filter a {
-    padding: 0.4em 1em;
-    border-radius: 999px;
-    border: 1px solid rgb(255 255 255 / 0.25);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  .filter a:hover {
-    background: rgb(255 255 255 / 0.1);
+  .filter .btn {
+    padding: 0.45em 1.1em;
   }
   .decade {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 24px;
+    margin-top: 24px;
   }
   .decade + .decade {
-    margin-top: 56px;
+    margin-top: 48px;
   }
   .cards {
     display: grid;
-    gap: 24px;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+  @media (max-width: 520px) {
+    .cards {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
   }
 </style>

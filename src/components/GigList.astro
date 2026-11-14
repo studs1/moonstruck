@@ -3,38 +3,52 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   gigs: CollectionEntry<'auftritte'>[];
+  /** Beschriftung über dem Titel, z.B. "Nächster Auftritt" */
+  label?: string;
 }
-const { gigs } = Astro.props;
+const { gigs, label } = Astro.props;
 const day = new Intl.DateTimeFormat('de-CH', { day: '2-digit', timeZone: 'UTC' });
 const mon = new Intl.DateTimeFormat('de-CH', { month: 'short', timeZone: 'UTC' });
-const year = new Intl.DateTimeFormat('de-CH', { year: 'numeric', timeZone: 'UTC' });
-const weekday = new Intl.DateTimeFormat('de-CH', { weekday: 'long', timeZone: 'UTC' });
+const long = new Intl.DateTimeFormat('de-CH', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 
 {
   gigs.length === 0 ? (
-    <p class="empty">Zurzeit sind keine öffentlichen Auftritte geplant – buchen Sie uns für Ihren Anlass!</p>
+    <div class="gig panel--dark">
+      <div class="gig__body">
+        {label && <span class="eyebrow">{label}</span>}
+        <p class="gig__title">Zurzeit keine öffentlichen Auftritte geplant</p>
+        <p class="gig__meta">Buchen Sie uns für Ihren Anlass!</p>
+      </div>
+      <slot />
+    </div>
   ) : (
     <ul class="gigs">
-      {gigs.map((g) => (
-        <li class="gig">
+      {gigs.map((g, i) => (
+        <li class="gig panel--dark">
           <time class="gig__date" datetime={g.data.date.toISOString().slice(0, 10)}>
             <span class="gig__day">{day.format(g.data.date)}</span>
             <span class="gig__mon">{mon.format(g.data.date).replace('.', '')}</span>
-            <span class="gig__year">{year.format(g.data.date)}</span>
           </time>
           <div class="gig__body">
-            <h3>{g.data.title}</h3>
-            <p>
-              {weekday.format(g.data.date)} · {g.data.ort}
+            {label && <span class="eyebrow">{label}</span>}
+            <p class="gig__title">
+              {g.data.title}, {g.data.ort}
+            </p>
+            <p class="gig__meta">
+              {long.format(g.data.date)}
               {g.data.zeit && <> · {g.data.zeit}</>}
+              {g.data.link && (
+                <>
+                  {' · '}
+                  <a href={g.data.link} rel="noopener">
+                    Infos
+                  </a>
+                </>
+              )}
             </p>
           </div>
-          {g.data.link && (
-            <a class="gig__link" href={g.data.link} rel="noopener">
-              Infos →
-            </a>
-          )}
+          {i === 0 && <slot />}
         </li>
       ))}
     </ul>
@@ -51,52 +65,48 @@ const weekday = new Intl.DateTimeFormat('de-CH', { weekday: 'long', timeZone: 'U
   }
   .gig {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 20px;
-    padding: 16px 20px;
-    border-radius: var(--radius);
-    background: rgb(255 255 255 / 0.06);
-    border: 1px solid rgb(255 255 255 / 0.12);
+    gap: 16px 24px;
+    padding: 20px 24px;
   }
   .gig__date {
     display: grid;
+    place-content: center;
     justify-items: center;
-    min-width: 72px;
-    padding: 8px 6px;
-    border-radius: 12px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
     background: var(--white);
-    color: var(--navy-800);
+    color: var(--navy-900);
     font-family: var(--font-display);
-    line-height: 1.05;
+    line-height: 1;
+    flex: none;
   }
   .gig__day {
-    font-size: 1.8rem;
+    font-size: 1.35rem;
     font-weight: 700;
   }
   .gig__mon {
-    font-size: 0.85rem;
-    font-weight: 600;
+    margin-top: 2px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--blue-500);
   }
-  .gig__year {
-    font-size: 0.75rem;
-    color: var(--ink-soft);
+  .gig__body {
+    flex: 1;
+    min-width: 200px;
   }
-  .gig__body h3 {
+  .gig__title {
     margin: 0 0 0.15em;
-    font-size: 1.3rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
   }
-  .gig__body p {
+  .gig__meta {
     margin: 0;
-    opacity: 0.85;
-  }
-  .gig__link {
-    margin-left: auto;
-    white-space: nowrap;
-  }
-  .empty {
-    opacity: 0.85;
+    font-size: 0.9rem;
+    color: var(--text-soft);
   }
 </style>

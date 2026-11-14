@@ -5,36 +5,36 @@ import { url } from '../../lib/util';
 const pdf = url('/downloads/Stage-setup_moonstruck.pdf');
 ---
 
-<Base title="Stageplan" description="Stageplan und Bühnensetup von moonstruck für Techniker.">
-  <section class="section--dark moon page-head">
-    <div class="wrap">
-      <span class="eyebrow">Für Techniker</span>
-      <h1>Stageplan</h1>
-      <p class="lead">Bühnenaufstellung und technisches Setup der moonstruck.</p>
-      <a class="btn btn--light" href={pdf} download>
+<Base title="Stageplan" description="Stageplan und Bühnensetup von moonstruck für Techniker und Veranstalter.">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Stageplan</span>
+      <h1>Technik und Bühne <span class="hl">für Veranstalter</span></h1>
+      <p class="lead">Hier der Moonstruck-Stageplan für die Techniker.</p>
+      <a class="btn btn--accent" href={pdf} download>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"
           ><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"></path></svg
         >
         Stageplan herunterladen (PDF)
       </a>
-    </div>
-  </section>
+    </header>
 
-  <section class="section">
-    <div class="wrap">
-      <object class="pdf card" data={pdf} type="application/pdf" aria-label="Stageplan moonstruck">
-        <p class="fallback">Die Vorschau kann in diesem Browser nicht angezeigt werden. <a href={pdf}>PDF öffnen</a></p>
-      </object>
-    </div>
-  </section>
+    <object class="pdf sheet" data={pdf} type="application/pdf" aria-label="Stageplan moonstruck">
+      <p class="fallback">Die Vorschau kann in diesem Browser nicht angezeigt werden. <a href={pdf}>PDF öffnen</a></p>
+    </object>
+  </div>
 </Base>
 
 <style>
+  .page-head .btn {
+    margin-top: 0.5rem;
+  }
   .pdf {
     display: block;
     width: 100%;
     height: min(80vh, 900px);
     border: 0;
+    overflow: hidden;
   }
   .fallback {
     padding: 2rem;

@@ -7,34 +7,30 @@ const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order 
 ---
 
 <Base title="Bandmitglieder" description="Die acht Musiker von moonstruck und ihre Instrumente.">
-  <section class="section--dark moon page-head">
-    <div class="wrap">
+  <div class="wrap">
+    <header class="page-head">
       <span class="eyebrow">Die Band</span>
-      <h1>Bandmitglieder</h1>
-      <p class="lead">Acht Musiker, ein Sound. Mit der Maus über ein Foto fahren (oder antippen), um die Musiker live zu sehen.</p>
-    </div>
-  </section>
+      <h1>Die Musiker <span class="hl">hinter Moonstruck</span></h1>
+      <p class="lead">Mit der Maus über ein Foto fahren (oder antippen), um die Musiker live zu sehen.</p>
+    </header>
 
-  <section class="section">
-    <div class="wrap">
-      <ul class="members">
-        {
-          members.map((m) => (
-            <li id={m.id} class="member" tabindex="0">
-              <div class="member__img">
-                <Image src={m.data.portrait} alt={`Portrait ${m.data.name}`} widths={[360, 600]} sizes="(max-width: 600px) 100vw, 280px" />
-                {m.data.live && <Image class="member__live" src={m.data.live} alt={`${m.data.name} live`} widths={[360, 600]} sizes="(max-width: 600px) 100vw, 280px" />}
-              </div>
-              <div class="member__body">
-                <h2>{m.data.name}</h2>
-                <p>{m.data.instrument}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+    <ul class="members">
+      {
+        members.map((m) => (
+          <li id={m.id} class="member" tabindex="0">
+            <div class="member__img">
+              <Image src={m.data.portrait} alt={`Portrait ${m.data.name}`} widths={[300, 500]} sizes="(max-width: 600px) 50vw, 240px" />
+              {m.data.live && <Image class="member__live" src={m.data.live} alt={`${m.data.name} live`} widths={[300, 500]} sizes="(max-width: 600px) 50vw, 240px" />}
+            </div>
+            <div class="member__body">
+              <h2>{m.data.name}</h2>
+              <p>{m.data.instrument}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </Base>
 
 <style>
@@ -43,19 +39,26 @@ const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order 
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 24px;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  @media (max-width: 520px) {
+    .members {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
   }
   .member {
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     background: var(--white);
+    color: var(--ink);
     box-shadow: var(--shadow);
-    scroll-margin-top: 80px;
+    scroll-margin-top: 24px;
     outline: none;
   }
   .member:target {
-    box-shadow: 0 0 0 3px var(--blue-500), var(--shadow-lg);
+    box-shadow: 0 0 0 3px var(--accent), var(--shadow);
   }
   .member__img {
     position: relative;
@@ -79,15 +82,17 @@ const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order 
     opacity: 1;
   }
   .member__body {
-    padding: 16px 20px 20px;
+    padding: 14px 16px 16px;
   }
   .member__body h2 {
-    font-size: 1.25rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--navy-900);
     margin: 0 0 0.2em;
   }
   .member__body p {
     margin: 0;
+    font-size: 0.88rem;
     color: var(--blue-500);
-    font-weight: 500;
   }
 </style>

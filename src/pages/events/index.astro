@@ -7,52 +7,45 @@ import { url, upcomingGigs } from '../../lib/util';
 const gigs = await upcomingGigs();
 ---
 
-<Base title="Auftritte" description="Kommende Auftritte und bisherige Highlights von moonstruck.">
-  <section class="section section--dark moon">
-    <div class="wrap narrow">
-      <span class="eyebrow">Auftritte</span>
-      <h1>Live erleben</h1>
+<Base title="Höhepunkte" description="Kommende Auftritte und bisherige Highlights von moonstruck.">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Höhepunkte</span>
+      <h1>Termine <span class="hl">&amp; Highlights</span></h1>
       <p class="lead">Die nächsten öffentlichen Auftritte der moonstruck. Private Anlässe sind hier nicht aufgeführt.</p>
-      <GigList gigs={gigs} />
-    </div>
-  </section>
+    </header>
 
-  <section class="section">
-    <div class="wrap narrow">
-      <span class="eyebrow">Rückblick</span>
-      <h2>Bisherige Highlights</h2>
-      <p class="lead">Was und wo die bisherigen Höhepunkte der moonstruck waren:</p>
-      <ul class="hl">
-        {highlights.map((h) => <li>{h}</li>)}
+    <GigList gigs={gigs} />
+
+    <section class="section">
+      <h2>Bisherige Band-Highlights</h2>
+      <p class="lead">Wenn Ihr wissen wollt, was und wo die bisherigen Höhepunkte der moonstruck waren:</p>
+      <ul class="hl-list">
+        {highlights.map((h) => <li class="panel">{h}</li>)}
       </ul>
-      <a class="btn btn--primary" href={url('/events/fotogalerien/')}>Zu den Fotogalerien →</a>
-    </div>
-  </section>
+      <a class="btn btn--accent" href={url('/events/fotogalerien/')}>Zu den Fotogalerien</a>
+    </section>
+  </div>
 </Base>
 
 <style>
-  .narrow {
-    max-width: 860px;
+  .section {
+    margin-top: 16px;
   }
-  .lead {
-    margin-bottom: 2rem;
-  }
-  .hl {
+  .hl-list {
     list-style: none;
-    margin: 0 0 2.5rem;
+    margin: 0 0 2rem;
     padding: 0;
     display: grid;
     gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
-  .hl li {
+  .hl-list li {
     position: relative;
-    padding: 14px 18px 14px 44px;
-    border-radius: var(--radius);
-    background: var(--white);
-    box-shadow: var(--shadow);
+    padding: 13px 16px 13px 42px;
+    font-size: 0.95rem;
   }
-  .hl li::before {
+  .hl-list li::before {
     content: '';
     position: absolute;
     left: 16px;
@@ -61,6 +54,6 @@ const gigs = await upcomingGigs();
     height: 14px;
     margin-top: -7px;
     border-radius: 50%;
-    box-shadow: inset -4px 2px 0 0 var(--blue-500);
+    box-shadow: inset -4px 2px 0 0 var(--accent);
   }
 </style>
