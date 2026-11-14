@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import { contact } from '../data/site';
+
+const tel = contact.phone.replace(/\s/g, '');
+---
+
+<Base title="Kontakt" description="moonstruck buchen: Kontakt für Anfragen, Engagements und Demo-CDs.">
+  <section class="section section--dark moon">
+    <div class="wrap grid-2 top">
+      <div>
+        <span class="eyebrow">Kontakt</span>
+        <h1>moonstruck buchen</h1>
+        <p class="lead">
+          Möchten Sie die moonstruck engagieren, haben Sie Fragen zur Stilrichtung oder sonst irgendein komisches Anliegen? Zögern Sie nicht und nehmen Sie
+          unverzüglich mit uns Kontakt auf.
+        </p>
+      </div>
+
+      <div class="contact card">
+        <p class="contact__label">Die ultimative Kontaktadresse</p>
+        <address>
+          <strong>{contact.name}</strong><br />
+          {contact.person}<br />
+          {contact.street}<br />
+          {contact.city}
+        </address>
+        <div class="contact__actions">
+          <a class="btn btn--primary" href={`mailto:${contact.email}?subject=Anfrage%20moonstruck`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"
+              ><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg
+            >
+            {contact.email}
+          </a>
+          <a class="btn btn--outline" href={`tel:${tel}`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"
+              ><path
+                d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"
+                stroke-linejoin="round"></path></svg
+            >
+            {contact.phone}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top {
+    align-items: start;
+  }
+  .contact {
+    padding: clamp(24px, 4vw, 40px);
+    color: var(--ink);
+  }
+  .contact__label {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue-500);
+  }
+  address {
+    font-style: normal;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+  }
+  address strong {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+  }
+  .contact__actions {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+  }
+  .btn--outline {
+    border-color: var(--blue-500);
+    color: var(--blue-500);
+  }
+  .btn--outline:hover {
+    background: var(--blue-50);
+  }
+</style>

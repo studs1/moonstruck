@@ -1,0 +1,156 @@
+---
+/**
+ * Lightbox für alle Links mit [data-lightbox] innerhalb von [data-gallery].
+ * Ohne JavaScript öffnen die Links einfach das grosse Bild.
+ */
+---
+
+<dialog class="lb" aria-label="Bildanzeige">
+  <img class="lb__img" alt="" />
+  <p class="lb__count" aria-live="polite"></p>
+  <button class="lb__btn lb__close" type="button" aria-label="Schliessen">
+    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+  </button>
+  <button class="lb__btn lb__prev" type="button" aria-label="Vorheriges Bild">
+    <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></svg>
+  </button>
+  <button class="lb__btn lb__next" type="button" aria-label="Nächstes Bild">
+    <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
+  </button>
+</dialog>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('.lb')!;
+  const img = dlg.querySelector<HTMLImageElement>('.lb__img')!;
+  const count = dlg.querySelector<HTMLElement>('.lb__count')!;
+  let links: HTMLAnchorElement[] = [];
+  let idx = 0;
+
+  function show(i: number) {
+    idx = (i + links.length) % links.length;
+    const a = links[idx];
+    img.src = a.href;
+    img.alt = a.querySelector('img')?.alt ?? '';
+    count.textContent = `${idx + 1} / ${links.length}`;
+    // nächstes Bild vorladen
+    new Image().src = links[(idx + 1) % links.length].href;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gal) => {
+    gal.addEventListener('click', (e) => {
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-lightbox]');
+      if (!a) return;
+      e.preventDefault();
+      links = [...gal.querySelectorAll<HTMLAnchorElement>('a[data-lightbox]')];
+      show(links.indexOf(a));
+      dlg.showModal();
+    });
+  });
+
+  dlg.querySelector('.lb__close')!.addEventListener('click', () => dlg.close());
+  dlg.querySelector('.lb__prev')!.addEventListener('click', () => show(idx - 1));
+  dlg.querySelector('.lb__next')!.addEventListener('click', () => show(idx + 1));
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg) dlg.close();
+  });
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+
+  // Wischen auf Touch-Geräten
+  let x0: number | null = null;
+  dlg.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+  dlg.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) show(idx + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+</script>
+
+<style>
+  .lb {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(1 11 19 / 0.96);
+  }
+  .lb[open] {
+    display: grid;
+    place-items: center;
+  }
+  .lb::backdrop {
+    background: transparent;
+  }
+  .lb__img {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 96px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgb(0 0 0 / 0.5);
+  }
+  .lb__count {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    color: var(--blue-100);
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .lb__btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.1);
+    color: var(--white);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .lb__btn:hover {
+    background: rgb(255 255 255 / 0.22);
+  }
+  .lb__btn svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .lb__close {
+    top: 16px;
+    right: 16px;
+  }
+  .lb__prev {
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb__next {
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  @media (max-width: 600px) {
+    .lb__prev,
+    .lb__next {
+      top: auto;
+      bottom: 8px;
+      transform: none;
+    }
+  }
+</style>

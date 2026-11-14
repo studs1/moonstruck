@@ -1,0 +1,73 @@
+---
+import Base from '../../../layouts/Base.astro';
+import GalleryCard from '../../../components/GalleryCard.astro';
+import { galleries } from '../../../lib/util';
+
+const all = await galleries();
+const decades = [...new Set(all.map((g) => Math.floor(g.data.date.getUTCFullYear() / 10) * 10))];
+---
+
+<Base title="Fotogalerien" description="Fotos von Auftritten der moonstruck seit 2000.">
+  <section class="section--dark moon page-head">
+    <div class="wrap">
+      <span class="eyebrow">Fotogalerien</span>
+      <h1>Bilder von unterwegs</h1>
+      <p class="lead">
+        Unter dieser Rubrik werden laufend die «schgandalösesten» Bilder der moonstruck veröffentlicht. Für allfällige Schäden wird jegliche Haftung
+        abgelehnt.
+      </p>
+      <nav class="filter" aria-label="Nach Jahrzehnt springen">
+        {decades.map((d) => <a href={`#d${d}`}>{d}er</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      {
+        decades.map((d) => (
+          <section class="decade" id={`d${d}`}>
+            <h2>{d}er</h2>
+            <div class="cards">
+              {all
+                .filter((g) => Math.floor(g.data.date.getUTCFullYear() / 10) * 10 === d)
+                .map((g) => (
+                  <GalleryCard slug={g.id} title={g.data.title} date={g.data.date} count={g.images.length} cover={g.cover?.img} />
+                ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
+  .filter a {
+    padding: 0.4em 1em;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.25);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .filter a:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+  .decade {
+    scroll-margin-top: 80px;
+  }
+  .decade + .decade {
+    margin-top: 56px;
+  }
+  .cards {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+</style>

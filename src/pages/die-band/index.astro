@@ -1,0 +1,210 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import bandPoster from '../../assets/band-poster.jpg';
+import liveMgb from '../../assets/live-mgb.jpg';
+import { url } from '../../lib/util';
+
+const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Die Band" description="Die moonstruck wurde 1995 in Visp gegründet: acht Musiker zwischen New Orleans Jazz, Street Jazz, Blues, Bebop und Funk.">
+  <section class="section--dark moon page-head">
+    <div class="wrap">
+      <span class="eyebrow">Die Band</span>
+      <h1>moonstruck, seit 1995</h1>
+      <p class="lead">Vom traditionellen New Orleans Jazz bis zu James Brown: acht Musiker aus dem Oberwallis, die einfach Freude an der Musik haben.</p>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap story">
+      <div class="story__text">
+        <h2>Unsere Geschichte</h2>
+        <p>
+          Die moonstruck wurde im Jahre 1995 in Visp gegründet und hat sich vor allem dem traditionellen Jazz verschrieben. In den ersten Jahren machte die
+          Band einen grossen Wandel durch, doch heute haben sich die 8 Musiker endlich gefunden.
+        </p>
+        <p>
+          In den Anfängen befasste sich die Band vor allem mit traditionellem Jazz. Als New-Orleans-Jazzband vermochte man aber schon damals das Publikum
+          zu begeistern. Zusätzlich widmete sich die Band dem <strong>Street-Jazz</strong>: Publikum und Passanten ohne Soundanlage in swingende Rhythmen
+          versetzen, ein Geschenk der Musik, das den Musikern auch heute noch viel Freude bereitet.
+        </p>
+        <p>
+          Seit 1998 zählen wir eine Stimme zu unserem Sound. Dank dem <strong>Lead Vocal</strong> konnten wir in den letzten Jahren unser Spektrum
+          kontinuierlich erweitern. Zusätzlich zum Traditionellen spielen wir heute zum Beispiel Nummern der Blues Brothers, The Commitments, James Brown
+          etc.
+        </p>
+        <blockquote>
+          New Orleans Jazz, Street Jazz, Blues, Bebop und Funk. Kurz: einfach alles, was ein Party- und Konzertpublikum verzaubert.
+        </blockquote>
+        <a class="btn btn--primary" href={url('/downloads/Bandbeschrieb_moonstruck.pdf')} download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"
+            ><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"></path></svg
+          >
+          Bandbeschrieb (PDF, 2.1 MB)
+        </a>
+      </div>
+      <div class="story__media">
+        <Image src={bandPoster} alt="Bandfoto moonstruck" widths={[500, 800, 1030]} sizes="(max-width: 860px) 100vw, 440px" />
+        <Image src={liveMgb} alt="moonstruck live am MGB-Jubiläum 2023" widths={[500, 900]} sizes="(max-width: 860px) 100vw, 440px" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="eyebrow">Besetzung</span>
+          <h2>Die Musiker</h2>
+        </div>
+        <a class="btn btn--primary" href={url('/die-band/bandmitglieder/')}>Alle Bandmitglieder →</a>
+      </div>
+      <ul class="mini">
+        {
+          members.map((m) => (
+            <li>
+              <a href={url(`/die-band/bandmitglieder/#${m.id}`)}>
+                <Image src={m.data.portrait} alt="" widths={[160, 320]} sizes="96px" />
+                <span>
+                  <strong>{m.data.name}</strong>
+                  <small>{m.data.instrument}</small>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap links">
+      <a class="link-card" href={url('/die-band/klangprobe/')}>
+        <span class="eyebrow">Klangprobe</span>
+        <h3>Reinhören →</h3>
+        <p>Liveaufnahmen aus diversen Konzerten.</p>
+      </a>
+      <a class="link-card" href={url('/die-band/stageplan/')}>
+        <span class="eyebrow">Für Techniker</span>
+        <h3>Stageplan →</h3>
+        <p>Bühnenaufstellung und Setup als PDF.</p>
+      </a>
+      <a class="link-card" href={url('/events/fotogalerien/')}>
+        <span class="eyebrow">Fotos</span>
+        <h3>Fotogalerien →</h3>
+        <p>Über 30 Galerien von 2000 bis heute.</p>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .story {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+  }
+  @media (min-width: 860px) {
+    .story {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+  .story__text {
+    max-width: 65ch;
+  }
+  blockquote {
+    margin: 1.5rem 0 2rem;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--blue-500);
+    background: var(--blue-50);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--navy-800);
+  }
+  .story__media {
+    display: grid;
+    gap: 20px;
+    align-content: start;
+  }
+  .story__media :global(img) {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    width: 100%;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .head h2 {
+    margin: 0;
+  }
+  .mini {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  .mini a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+  .mini a:hover {
+    transform: translateY(-2px);
+  }
+  .mini :global(img) {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 15%;
+    flex: none;
+  }
+  .mini strong {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+  .mini small {
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+  }
+  .links {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .link-card {
+    display: block;
+    padding: 28px;
+    border-radius: var(--radius);
+    background: var(--blue-50);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .link-card:hover {
+    background: var(--blue-100);
+    color: var(--ink);
+  }
+  .link-card p {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+</style>

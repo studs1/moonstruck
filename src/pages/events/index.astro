@@ -1,0 +1,66 @@
+---
+import Base from '../../layouts/Base.astro';
+import GigList from '../../components/GigList.astro';
+import { highlights } from '../../data/site';
+import { url, upcomingGigs } from '../../lib/util';
+
+const gigs = await upcomingGigs();
+---
+
+<Base title="Auftritte" description="Kommende Auftritte und bisherige Highlights von moonstruck.">
+  <section class="section section--dark moon">
+    <div class="wrap narrow">
+      <span class="eyebrow">Auftritte</span>
+      <h1>Live erleben</h1>
+      <p class="lead">Die nächsten öffentlichen Auftritte der moonstruck. Private Anlässe sind hier nicht aufgeführt.</p>
+      <GigList gigs={gigs} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow">
+      <span class="eyebrow">Rückblick</span>
+      <h2>Bisherige Highlights</h2>
+      <p class="lead">Was und wo die bisherigen Höhepunkte der moonstruck waren:</p>
+      <ul class="hl">
+        {highlights.map((h) => <li>{h}</li>)}
+      </ul>
+      <a class="btn btn--primary" href={url('/events/fotogalerien/')}>Zu den Fotogalerien →</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 860px;
+  }
+  .lead {
+    margin-bottom: 2rem;
+  }
+  .hl {
+    list-style: none;
+    margin: 0 0 2.5rem;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+  .hl li {
+    position: relative;
+    padding: 14px 18px 14px 44px;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow);
+  }
+  .hl li::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
+    border-radius: 50%;
+    box-shadow: inset -4px 2px 0 0 var(--blue-500);
+  }
+</style>

@@ -1,0 +1,93 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const members = (await getCollection('mitglieder')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Bandmitglieder" description="Die acht Musiker von moonstruck und ihre Instrumente.">
+  <section class="section--dark moon page-head">
+    <div class="wrap">
+      <span class="eyebrow">Die Band</span>
+      <h1>Bandmitglieder</h1>
+      <p class="lead">Acht Musiker, ein Sound. Mit der Maus über ein Foto fahren (oder antippen), um die Musiker live zu sehen.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <ul class="members">
+        {
+          members.map((m) => (
+            <li id={m.id} class="member" tabindex="0">
+              <div class="member__img">
+                <Image src={m.data.portrait} alt={`Portrait ${m.data.name}`} widths={[360, 600]} sizes="(max-width: 600px) 100vw, 280px" />
+                {m.data.live && <Image class="member__live" src={m.data.live} alt={`${m.data.name} live`} widths={[360, 600]} sizes="(max-width: 600px) 100vw, 280px" />}
+              </div>
+              <div class="member__body">
+                <h2>{m.data.name}</h2>
+                <p>{m.data.instrument}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .members {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .member {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    scroll-margin-top: 80px;
+    outline: none;
+  }
+  .member:target {
+    box-shadow: 0 0 0 3px var(--blue-500), var(--shadow-lg);
+  }
+  .member__img {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: #e9eef2;
+  }
+  .member__img :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 20%;
+  }
+  .member__img :global(.member__live) {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .member:hover :global(.member__live),
+  .member:focus :global(.member__live) {
+    opacity: 1;
+  }
+  .member__body {
+    padding: 16px 20px 20px;
+  }
+  .member__body h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.2em;
+  }
+  .member__body p {
+    margin: 0;
+    color: var(--blue-500);
+    font-weight: 500;
+  }
+</style>

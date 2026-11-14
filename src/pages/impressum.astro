@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { contact } from '../data/site';
+---
+
+<Base title="Impressum & Datenschutz">
+  <section class="section section--white">
+    <div class="wrap prose">
+      <h1>Impressum</h1>
+      <p>
+        <strong>{contact.name}</strong><br />
+        {contact.person}<br />
+        {contact.street}<br />
+        {contact.city}<br />
+        Schweiz
+      </p>
+      <p>
+        Telefon: {contact.phone}<br />
+        E-Mail: <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </p>
+
+      <h2>Datenschutz</h2>
+      <p>
+        Diese Website ist eine rein statische Website. Wir setzen keine Cookies, keine Analyse- oder Tracking-Werkzeuge und keine eingebetteten Inhalte
+        von Drittanbietern ein. Schriften werden direkt von dieser Website geladen.
+      </p>
+      <p>
+        Die Website wird über GitHub Pages (GitHub Inc., USA) ausgeliefert. Beim Aufruf verarbeitet der Hosting-Anbieter technisch notwendige Daten wie
+        IP-Adresse, Datum und Uhrzeit sowie den aufgerufenen Inhalt, um die Seite auszuliefern und den Betrieb sicherzustellen.
+      </p>
+      <p>
+        Wenn Sie uns per E-Mail oder Telefon kontaktieren, verwenden wir Ihre Angaben ausschliesslich zur Bearbeitung Ihrer Anfrage. Bei Fragen zum
+        Datenschutz wenden Sie sich an die oben genannte Adresse.
+      </p>
+
+      <h2>Bildrechte</h2>
+      <p>Alle Fotos und Tonaufnahmen © moonstruck, sofern nicht anders vermerkt.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .prose {
+    max-width: 720px;
+  }
+  .prose h2 {
+    margin-top: 2rem;
+  }
+</style>

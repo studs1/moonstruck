@@ -1,0 +1,373 @@
+---
+import '../styles/global.css';
+import { Image } from 'astro:assets';
+import header from '../assets/header.jpg';
+import { nav, contact } from '../data/site';
+import { url, upcomingGigs, formatDate } from '../lib/util';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'moonstruck – Soul, Blues & Jazz aus Visp. New Orleans Jazz, Street Jazz, Blues, Bebop und Funk für Party- und Konzertpublikum.',
+} = Astro.props;
+
+const fullTitle = title ? `${title} | moonstruck` : 'moonstruck – soul blues jazz';
+const current = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+// Aktiv ist der Menüpunkt mit dem längsten passenden Pfad-Präfix (/events/ vs. /events/fotogalerien/)
+const activeHref = nav
+  .map((n) => n.href)
+  .filter((h) => (h === '/' ? current === '/' : current.startsWith(h)))
+  .sort((a, b) => b.length - a.length)[0];
+const isActive = (href: string) => href === activeHref;
+const next = (await upcomingGigs())[0];
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="de-CH">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <meta name="theme-color" content="#0f4567" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="de_CH" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Zum Inhalt springen</a>
+
+    <header class="masthead">
+      <a href={url('/')} class="masthead__img" aria-label="moonstruck – zur Startseite">
+        <Image src={header} alt="moonstruck – soul blues jazz" loading="eager" fetchpriority="high" widths={[889]} sizes="889px" />
+      </a>
+    </header>
+
+    <nav class="nav" aria-label="Hauptnavigation">
+      <div class="nav__inner wrap">
+        <a href={url('/')} class="nav__brand" aria-hidden="true" tabindex="-1">moonstruck</a>
+        <button class="nav__toggle" aria-expanded="false" aria-controls="nav-list">
+          <span class="visually-hidden">Menü</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+        </button>
+        <ul id="nav-list" class="nav__list">
+          {
+            nav.map((item) => (
+              <li class:list={[{ 'has-children': item.children }]}>
+                <a href={url(item.href)} aria-current={current.replace(/\/?$/, '/') === item.href ? 'page' : undefined} class:list={[{ active: isActive(item.href) }]}>
+                  {item.label}
+                </a>
+                {item.children && (
+                  <ul class="nav__sub">
+                    {item.children.map((c) => (
+                      <li>
+                        <a href={url(c.href)} aria-current={current.startsWith(c.href) ? 'page' : undefined}>
+                          {c.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </nav>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer__grid">
+        <div>
+          <p class="footer__brand">moonstruck</p>
+          <p>soul · blues · jazz<br />aus Visp, seit 1995</p>
+        </div>
+        <div>
+          <h2 class="footer__h">Kontakt</h2>
+          <p>
+            {contact.person}<br />
+            {contact.street}<br />
+            {contact.city}
+          </p>
+          <p>
+            <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a><br />
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          </p>
+        </div>
+        <div>
+          <h2 class="footer__h">Nächster Auftritt</h2>
+          {
+            next ? (
+              <p>
+                <strong>{formatDate(next.data.date)}</strong>
+                <br />
+                {next.data.title}, {next.data.ort}
+              </p>
+            ) : (
+              <p>Zurzeit keine öffentlichen Auftritte geplant.</p>
+            )
+          }
+          <p><a href={url('/events/')}>Alle Auftritte →</a></p>
+        </div>
+      </div>
+      <div class="wrap footer__bottom">
+        <span>© {new Date().getFullYear()} moonstruck</span>
+        <span><a href={url('/impressum/')}>Impressum & Datenschutz</a></span>
+        <span>sponsored by <a href="https://www.nowhow.ch" rel="noopener">nowhow solutions AG</a></span>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.nav__toggle');
+      const list = document.getElementById('nav-list');
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!open));
+        list?.classList.toggle('open', !open);
+      });
+
+      // Wortmarke in der Navigation einblenden, sobald das Headerbild weggescrollt ist
+      const mast = document.querySelector('.masthead');
+      const navEl = document.querySelector('.nav');
+      if (mast && navEl) {
+        new IntersectionObserver(([e]) => navEl.classList.toggle('stuck', !e.isIntersecting)).observe(mast);
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 8px;
+    z-index: 100;
+    background: var(--white);
+    padding: 8px 14px;
+    border-radius: 8px;
+  }
+  .skip:focus {
+    left: 8px;
+  }
+
+  /* Headerbild: links schwarz (Bühne), rechts Verlauf wie im Bild, unten die blaue Leiste */
+  .masthead {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background:
+      linear-gradient(to bottom, transparent 80.5%, var(--navy-700) 80.5%),
+      linear-gradient(to right, #000 50%, transparent 50%),
+      linear-gradient(to bottom, #004467 0%, #002537 39%, #000407 73%, #000103 80%);
+  }
+  .masthead__img {
+    display: block;
+    width: min(100%, 889px);
+  }
+  .masthead__img :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--navy-700);
+    color: var(--white);
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .nav.stuck {
+    background: rgb(15 69 103 / 0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.25);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    gap: 1rem;
+  }
+  .nav__brand {
+    position: absolute;
+    left: var(--gutter);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+  .nav.stuck .nav__brand {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .nav__list {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav__list > li {
+    position: relative;
+  }
+  .nav__list a {
+    display: block;
+    padding: 0.55rem 0.95rem;
+    border-radius: 999px;
+    color: var(--blue-100);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .nav__list a:hover,
+  .nav__list a.active,
+  .nav__list a[aria-current='page'] {
+    color: var(--white);
+    background: rgb(255 255 255 / 0.1);
+  }
+  .nav__sub {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    min-width: 200px;
+    padding: 0.5rem;
+    margin: 0;
+    list-style: none;
+    background: var(--navy-800);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 6px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  }
+  .has-children:hover .nav__sub,
+  .has-children:focus-within .nav__sub {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+  .nav__sub a {
+    border-radius: 10px;
+  }
+  .nav__toggle {
+    display: none;
+    margin-left: auto;
+    background: none;
+    border: 0;
+    padding: 10px;
+    color: var(--white);
+    cursor: pointer;
+  }
+  .nav__toggle svg {
+    width: 26px;
+    height: 26px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  @media (max-width: 1100px) {
+    .nav__brand {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .nav__inner {
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .nav__brand {
+      display: block;
+      position: static;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .nav__toggle {
+      display: block;
+    }
+    .nav__list {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      padding-bottom: 0.75rem;
+    }
+    .nav__list.open {
+      display: flex;
+    }
+    .nav__sub {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      background: none;
+      box-shadow: none;
+      padding: 0 0 0 1rem;
+    }
+  }
+
+  .footer {
+    background: var(--navy-950);
+    color: var(--blue-100);
+    font-size: 0.95rem;
+    padding-top: 56px;
+  }
+  .footer a {
+    color: var(--white);
+  }
+  .footer__grid {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    padding-bottom: 40px;
+  }
+  .footer__brand {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.25rem;
+  }
+  .footer__h {
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue-300);
+    margin-bottom: 0.75rem;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    padding-block: 20px;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+    font-size: 0.85rem;
+    color: var(--blue-300);
+  }
+</style>

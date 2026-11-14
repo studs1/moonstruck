@@ -1,0 +1,103 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../../../layouts/Base.astro';
+import Lightbox from '../../../components/Lightbox.astro';
+import { galleries, url, formatMonth } from '../../../lib/util';
+
+export async function getStaticPaths() {
+  const all = await galleries();
+  return all.map((g, i) => ({
+    params: { slug: g.id },
+    props: { g, prev: all[i + 1], next: all[i - 1] },
+  }));
+}
+
+const { g, prev, next } = Astro.props;
+const images = await Promise.all(
+  g.images.map(async ({ img }) => ({
+    img,
+    full: (await getImage({ src: img, width: Math.min(img.width, 1800), format: 'webp' })).src,
+  })),
+);
+---
+
+<Base title={g.data.title} description={`Fotos: ${g.data.title} (${formatMonth(g.data.date)}) – moonstruck soul blues jazz`}>
+  <section class="section--dark moon page-head">
+    <div class="wrap">
+      <a class="back" href={url('/events/fotogalerien/')}>← Alle Galerien</a>
+      <span class="eyebrow">{formatMonth(g.data.date)} · {g.images.length} Fotos</span>
+      <h1>{g.data.title}</h1>
+      {g.data.description && <p class="lead">{g.data.description}</p>}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="masonry" data-gallery>
+        {
+          images.map(({ img, full }, i) => (
+            <a href={full} data-lightbox>
+              <Image src={img} alt={`${g.data.title}, Foto ${i + 1}`} widths={[400, 700]} sizes="(max-width: 600px) 50vw, 300px" />
+            </a>
+          ))
+        }
+      </div>
+
+      <nav class="pager" aria-label="Weitere Galerien">
+        {prev ? <a href={url(`/events/fotogalerien/${prev.id}/`)}>← {prev.data.title}</a> : <span />}
+        {next && <a href={url(`/events/fotogalerien/${next.id}/`)}>{next.data.title} →</a>}
+      </nav>
+    </div>
+  </section>
+  <Lightbox />
+</Base>
+
+<style>
+  .back {
+    display: table;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    opacity: 0.85;
+  }
+  .masonry {
+    columns: 4 260px;
+    column-gap: 14px;
+  }
+  .masonry a {
+    display: block;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    overflow: hidden;
+    break-inside: avoid;
+    background: var(--blue-100);
+  }
+  .masonry :global(img) {
+    width: 100%;
+    transition: transform 0.35s ease, opacity 0.2s ease;
+  }
+  .masonry a:hover :global(img) {
+    transform: scale(1.03);
+  }
+  @media (max-width: 600px) {
+    .masonry {
+      columns: 2;
+      column-gap: 8px;
+    }
+    .masonry a {
+      margin-bottom: 8px;
+    }
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--blue-100);
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+  .pager a {
+    text-decoration: none;
+  }
+</style>

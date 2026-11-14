@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/util';
+
+const pdf = url('/downloads/Stage-setup_moonstruck.pdf');
+---
+
+<Base title="Stageplan" description="Stageplan und Bühnensetup von moonstruck für Techniker.">
+  <section class="section--dark moon page-head">
+    <div class="wrap">
+      <span class="eyebrow">Für Techniker</span>
+      <h1>Stageplan</h1>
+      <p class="lead">Bühnenaufstellung und technisches Setup der moonstruck.</p>
+      <a class="btn btn--light" href={pdf} download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"
+          ><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"></path></svg
+        >
+        Stageplan herunterladen (PDF)
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <object class="pdf card" data={pdf} type="application/pdf" aria-label="Stageplan moonstruck">
+        <p class="fallback">Die Vorschau kann in diesem Browser nicht angezeigt werden. <a href={pdf}>PDF öffnen</a></p>
+      </object>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pdf {
+    display: block;
+    width: 100%;
+    height: min(80vh, 900px);
+    border: 0;
+  }
+  .fallback {
+    padding: 2rem;
+  }
+</style>

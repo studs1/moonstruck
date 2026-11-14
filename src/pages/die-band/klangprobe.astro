@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import AudioList from '../../components/AudioList.astro';
+import { url } from '../../lib/util';
+---
+
+<Base title="Klangprobe" description="Hörproben von moonstruck: Liveaufnahmen aus diversen Konzerten.">
+  <section class="section section--dark moon">
+    <div class="wrap narrow">
+      <span class="eyebrow">Klangprobe</span>
+      <h1>Reinhören</h1>
+      <p class="lead">
+        Diese Soundbeispiele sind Liveaufnahmen aus diversen Konzerten der moonstruck. Bei Bedarf können Sie auch eine
+        <a href={url('/kontakt/')}>Demo-CD anfordern</a>.
+      </p>
+      <AudioList />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+  .lead {
+    margin-bottom: 2rem;
+  }
+</style>
