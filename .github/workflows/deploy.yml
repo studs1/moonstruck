@@ -35,12 +35,14 @@ jobs:
       - run: npm ci
 
       # Bereits optimierte Bilder (AVIF/WebP) zwischen den Läufen aufbewahren:
-      # nur neue oder geänderte Bilder werden neu erzeugt (Build ~2 min → ~20 s).
-      - name: Astro-Bildcache
-        uses: actions/cache@v6
+      # nur neue oder geänderte Bilder werden neu erzeugt (Build ~10 min → ~10 s).
+      # Der Schlüssel enthält die Run-ID, damit der Cache nach JEDEM Lauf aktualisiert wird
+      # (sonst bleibt ein veralteter Cache stehen, z.B. nach Domain-/Pfadwechsel).
+      - name: Astro-Bildcache laden
+        uses: actions/cache/restore@v6
         with:
           path: node_modules/.astro
-          key: astro-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*.jpg', 'src/**/*.jpeg', 'src/**/*.png', 'src/**/*.webp') }}
+          key: astro-${{ hashFiles('package-lock.json') }}-${{ github.run_id }}
           restore-keys: |
             astro-${{ hashFiles('package-lock.json') }}-
             astro-
@@ -51,6 +53,12 @@ jobs:
           # z.B. https://<user>.github.io + /moonstruck – oder https://www.moonstruck.ch + "" mit Custom Domain
           SITE: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
+      - name: Astro-Bildcache speichern
+        uses: actions/cache/save@v6
+        with:
+          path: node_modules/.astro
+          key: astro-${{ hashFiles('package-lock.json') }}-${{ github.run_id }}
 
       - uses: actions/upload-pages-artifact@v5
         with:
