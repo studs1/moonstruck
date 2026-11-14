@@ -43,6 +43,7 @@ const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { nam
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-auto-rows: 1fr; /* alle Karten gleich hoch */
   }
   @media (max-width: 520px) {
     .members {
@@ -51,6 +52,8 @@ const jsonLd = [breadcrumbSchema(Astro.site, [{ name: 'Home', path: '/' }, { nam
     }
   }
   .member {
+    display: flex;
+    flex-direction: column;
     border-radius: var(--radius-lg);
     overflow: hidden;
     background: var(--white);
