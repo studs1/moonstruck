@@ -17,7 +17,7 @@ export async function bandSchema(site: URL | undefined, image?: string) {
     '@type': 'MusicGroup',
     '@id': abs(site, '/#band'),
     name: 'moonstruck',
-    alternateName: 'Moonstruck – soul blues jazz',
+    alternateName: 'moonstruck – soul blues jazz',
     slogan: 'soul blues jazz',
     description:
       'Soul-, Blues- und Jazzband aus Visp (Wallis), gegründet 1995. Acht Musiker spielen New Orleans Jazz, Street Jazz, Blues, Bebop und Funk für Party- und Konzertpublikum: Hochzeiten, Firmenanlässe, Festivals und Konzerte.',

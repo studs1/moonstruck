@@ -19,7 +19,7 @@ Zusätzlich wird täglich neu gebaut, damit vergangene Auftritte von selbst vers
 | Was | Wo |
 | --- | --- |
 | **Neuer Auftritt** | Datei `src/content/auftritte/JJJJ-MM-TT-name.md` anlegen (siehe Beispiel unten) |
-| **Neue Fotogalerie** | Ordner `src/content/galerien/<name>/` mit `index.md` + JPG-Dateien |
+| **Neue Fotogalerie** | Ordner `src/content/galerien/<JAHR-name>/` (z.B. `2025-ohoo`, klein, Bindestrich statt Leerzeichen) mit `index.md` + JPG-Dateien |
 | Bandmitglieder | `src/content/mitglieder/<name>.md` + `-portrait.jpg` / `-live.jpg` |
 | Klangproben | MP3 nach `public/audio/`, Eintrag in `src/data/site.ts` (`sounds`) |
 | Kontaktdaten, Menü, Highlights, Repertoire | `src/data/site.ts` |
@@ -40,7 +40,7 @@ tickets: https://...   # optional, zeigt einen «Tickets»-Knopf
 
 ### Fotogalerie
 
-Nur `title` und `date` sind Pflicht, alles andere ist optional (vollständiges Beispiel: `src/content/galerien/staldbach2023/index.md`).
+Nur `title` und `date` sind Pflicht, alles andere ist optional (vollständiges Beispiel: `src/content/galerien/2023-staldbach/index.md`).
 
 ```md
 ---
@@ -69,7 +69,7 @@ Alle Bilder im Ordner werden angezeigt (alphabetisch, z.B. `001.jpg`, `002.jpg`,
 Bilder vorher auf max. ca. 2000 px Kantenlänge verkleinern. Astro erzeugt beim Build AVIF/WebP in mehreren Grössen und einen unscharfen Platzhalter.
 Videos und Audioclips liegen in `public/video/` bzw. `public/audio/` (kurz halten, MP4/H.264 bzw. MP3).
 
-Jedes Bild hat einen teilbaren Link, z.B. `/events/fotogalerien/staldbach2023/#foto-3`.
+Jedes Bild hat einen teilbaren Link, z.B. `/events/fotogalerien/2023-staldbach/#foto-3`.
 
 ## Domain www.moonstruck.ch
 

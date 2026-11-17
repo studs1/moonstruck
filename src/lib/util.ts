@@ -21,7 +21,7 @@ export async function upcomingGigs() {
 }
 
 // Alle Galerie-Bilder einmalig per Glob einlesen (Astro optimiert sie beim Build)
-const galleryImages = import.meta.glob<{ default: ImageMetadata }>('/src/content/galerien/*/*.{jpg,jpeg,png,webp}', {
+const galleryImages = import.meta.glob<{ default: ImageMetadata }>('/src/content/galerien/*/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', {
   eager: true,
 });
 
