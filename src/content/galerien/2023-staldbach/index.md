@@ -1,5 +1,6 @@
 ---
 title: "Restaurant Staldbach"
+ort: Visp
 date: 2023-06-01
 cover: "009.jpg"
 kapitel:

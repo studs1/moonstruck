@@ -1,4 +1,5 @@
 ---
-title: "150 Jahre MG Edelweiss St. Niklaus"
+title: "150 Jahre MG Edelweiss"
 date: 2022-08-01
+ort: "St. Niklaus"
 ---

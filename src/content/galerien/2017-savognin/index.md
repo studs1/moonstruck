@@ -1,5 +1,5 @@
 ---
-title: "Bergrestaurant Tigigna, Savognin"
+title: "Bergrestaurant Tigigna"
 date: 2017-02-01
-description: "Adobe Acrobat Dokument"
+ort: Savognin
 ---
